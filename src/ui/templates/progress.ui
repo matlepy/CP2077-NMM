@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="libadwaita" version="1.0"/>
+  <template class="ProgressView" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkStack" id="progress_stack">
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="status_label">
+                <property name="label">Ready</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkProgressBar" id="download_progress">
+                <property name="fraction">0.0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkProgressBar" id="install_progress">
+                <property name="fraction">0.0</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

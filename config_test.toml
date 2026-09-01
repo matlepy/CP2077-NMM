@@ -1,0 +1,3 @@
+game_directory = "/tmp/game"
+cache_directory = "/tmp/cache"
+database_path = "/tmp/db.sqlite"

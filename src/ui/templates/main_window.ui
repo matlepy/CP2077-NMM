@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="libadwaita" version="1.0"/>
+  <template class="MainWindow" parent="AdwApplicationWindow">
+    <property name="title">Cyberpunk 2077 Mod Manager</property>
+    <property name="default-width">1000</property>
+    <property name="default-height">700</property>
+    <child>
+      <object class="AdwLeaflet" id="leaflet">
+        <property name="can-navigate-back">True</property>
+        <child>
+          <object class="AdwLeafletPage">
+            <property name="title">Sidebar</property>
+            <property name="name">sidebar</property>
+            <child>
+              <object class="AdwNavigationSplitView">
+                <property name="sidebar-width-request">250</property>
+                <property name="sidebar-visible">True</property>
+                <property name="content">
+                  <object class="AdwToolbarView">
+                    <child type="top">
+                      <object class="AdwHeaderBar">
+                        <property name="title-widget">
+                          <object class="AdwWindowTitle">
+                            <property name="title">Cyberpunk 2077 Mod Manager</property>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                    <child type="content">
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="AdwViewStack" id="view_stack">
+                            <property name="vexpand">True</property>
+                            <child>
+                              <object class="AdwViewStackPage">
+                                <property name="name">mod_browser</property>
+                                <property name="title">Mod Browser</property>
+                                <property name="icon-name">folder-symbolic</property>
+                                <property name="child">
+                                  <object class="ModBrowserView" id="mod_browser_view">
+                                    <property name="hexpand">True</property>
+                                    <property name="vexpand">True</property>
+                                  </object>
+                                </property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwViewStackPage">
+                                <property name="name">settings</property>
+                                <property name="title">Settings</property>
+                                <property name="icon-name">settings-symbolic</property>
+                                <property name="child">
+                                  <object class="SettingsView" id="settings_view">
+                                    <property name="hexpand">True</property>
+                                    <property name="vexpand">True</property>
+                                  </object>
+                                </property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwViewStackPage">
+                                <property name="name">load_order</property>
+                                <property name="title">Load Order</property>
+                                <property name="icon-name">view-list-symbolic</property>
+                                <property name="child">
+                                  <object class="LoadOrderView" id="load_order_view">
+                                    <property name="hexpand">True</property>
+                                    <property name="vexpand">True</property>
+                                  </object>
+                                </property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwViewStackPage">
+                                <property name="name">progress</property>
+                                <property name="title">Progress</property>
+                                <property name="icon-name">download-symbolic</property>
+                                <property name="child">
+                                  <object class="ProgressView" id="progress_view">
+                                    <property name="hexpand">True</property>
+                                    <property name="vexpand">True</property>
+                                  </object>
+                                </property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+                <property name="sidebar">
+                  <object class="AdwNavigationSidebar" id="navigation_sidebar">
+                    <property name="hexpand">False</property>
+                    <property name="vexpand">True</property>
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="AdwNavigationItem">
+                        <property name="title">Mod Browser</property>
+                        <property name="icon-name">folder-symbolic</property>
+                        <property name="name">mod_browser</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwNavigationItem">
+                        <property name="title">Settings</property>
+                        <property name="icon-name">settings-symbolic</property>
+                        <property name="name">settings</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwNavigationItem">
+                        <property name="title">Load Order</property>
+                        <property name="icon-name">view-list-symbolic</property>
+                        <property name="name">load_order</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwNavigationItem">
+                        <property name="title">Progress</property>
+                        <property name="icon-name">download-symbolic</property>
+                        <property name="name">progress</property>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
