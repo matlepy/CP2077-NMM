@@ -17,6 +17,7 @@ pub mod main_window;
 pub mod mod_browser;
 pub mod progress;
 pub mod settings;
+pub mod dependency_manager;
 
 pub use main_window::AppState;
 pub use main_window::MainWindow;

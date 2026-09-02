@@ -129,11 +129,13 @@ impl MainWindow {
         let load_order = crate::ui::load_order::build(&state);
         let progress = crate::ui::progress::build(&state);
         let settings = crate::ui::settings::build(&state);
+        let dependency_manager = crate::ui::dependency_manager::build(&state);
 
-        stack.add_titled(&mod_browser, "mod_browser", "Mods");
-        stack.add_titled(&load_order, "load_order", "Load Order");
-        stack.add_titled(&progress, "progress", "Progress");
-        stack.add_titled(&settings, "settings", "Settings");
+        stack.add_titled(&mod_browser, Some("mod_browser"), "Mods");
+        stack.add_titled(&load_order, Some("load_order"), "Load Order");
+        stack.add_titled(&progress, Some("progress"), "Progress");
+        stack.add_titled(&dependency_manager, Some("dependencies"), "Dependencies");
+        stack.add_titled(&settings, Some("settings"), "Settings");
 
         // Wire the sidebar to switch the stack.
         if let Some(list) = sidebar_box
@@ -151,7 +153,7 @@ impl MainWindow {
 
         let content = libadwaita::NavigationPage::new(&stack, "Content");
         split.set_content(Some(&content));
-        split.set_show_sidebar(true);
+        split.set_sidebar(true);
 
         self.set_content(Some(&split));
     }

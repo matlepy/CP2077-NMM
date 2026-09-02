@@ -1,0 +1,22 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "lsp": true,
+  "compaction": {
+    "auto": true,
+    "prune": true,
+    "reserved": 6000
+  },
+  "watcher": {
+    "ignore": [
+      "**/target/**",
+      "**/.git/**",
+      "**/.cargo/**",
+      "**/.sqlx/**"
+    ]
+  },
+  "subagent_depth": 1,
+  "instructions": ["./instructions/AGENTS.md"],
+  "formatter": {
+    "cargofmt": {}
+  }
+}
