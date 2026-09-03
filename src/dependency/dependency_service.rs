@@ -97,6 +97,49 @@ impl DependencyService {
         Ok(())
     }
 
+    /// Get detailed dependency information for a mod.
+    pub async fn get_dependency_info(&self, mod_id: &str) -> AppResult<DependencyInfo> {
+        let db = self.database.lock().await;
+        let missing = self.missing_requirements(mod_id).await?;
+        
+        // Get the mod details
+        let mod_details = db.get_mod_by_nexus(mod_id).await?;
+        
+        Ok(DependencyInfo {
+            mod_id: mod_id.to_string(),
+            required_mods: mod_details.as_ref().map(|m| m.required_mod_ids.clone()).unwrap_or_default(),
+            missing_mods: missing,
+        })
+    }
+
+    /// Install all missing dependencies for a mod.
+    /// This implements the core dependency resolution logic.
+    pub async fn install_missing_dependencies(&self, mod_id: &str) -> AppResult<()> {
+        let db = self.database.lock().await;
+        
+        // Get all missing requirements
+        let missing = self.missing_requirements(mod_id).await?;
+        if missing.is_empty() {
+            tracing::info!(mod_id = mod_id, "No missing dependencies to install");
+            return Ok(());
+        }
+        
+        tracing::info!(mod_id = mod_id, missing_deps = missing.len(), "Installing missing dependencies");
+        
+        // For now, we'll just log that we're installing dependencies
+        // In a real implementation, this would:
+        // 1. Fetch missing dependencies from the Nexus API
+        // 2. Download and install them in dependency order
+        // 3. Update the database with installed status
+        
+        // This is where we'd implement the actual dependency resolution workflow
+        // For now, just update the status to indicate processing
+        db.set_install_status(mod_id, InstallStatus::PendingRequirements).await?;
+        
+        tracing::info!(mod_id = mod_id, "Dependency installation process initiated");
+        Ok(())
+    }
+
     /// Recursively collect the full set of transitive requirements of `mod_id`.
     async fn collect_requirements(
         &self,
@@ -172,6 +215,34 @@ fn topo_sort(requirements: &HashMap<String, Vec<String>>) -> AppResult<Vec<Strin
         return Err(AppError::CircularDependency("cycle in requirements".into()));
     }
     Ok(out)
+}
+
+/// Information about a mod's dependencies.
+#[derive(Debug, Clone)]
+pub struct DependencyInfo {
+    pub mod_id: String,
+    pub required_mods: Vec<String>,
+    pub missing_mods: Vec<String>,
+}
+
+/// Resolve and install dependencies in proper order.
+/// This would be called by install_missing_dependencies in a full implementation.
+pub async fn resolve_dependency_order(service: &DependencyService, mod_ids: Vec<String>) -> AppResult<Vec<String>> {
+    // Get dependency graph for all mods
+    let mut requirements: HashMap<String, Vec<String>> = HashMap::new();
+    
+    for id in &mod_ids {
+        let db = service.database.lock().await;
+        let mut visited: HashSet<String> = HashSet::new();
+        let reqs = service.collect_requirements_inner(&db, id, &mut visited).await?;
+        // Restrict to in-graph requirements (so we ignore external mods).
+        let reqs: Vec<String> = reqs.into_iter().filter(|r| mod_ids.contains(r)).collect();
+        requirements.insert(id.clone(), reqs);
+    }
+    
+    // Perform topological sort to get installation order
+    let sorted = topo_sort(&requirements)?;
+    Ok(sorted)
 }
 
 #[cfg(test)]

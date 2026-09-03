@@ -666,6 +666,7 @@ async fn atomic_move(from: &Path, to: &Path) -> AppResult<()> {
 }
 
 /// Top-level facade so the UI has one entry point to "install a mod file".
+#[derive(Debug)]
 pub struct ModEngine {
     pub download_manager: DownloadManager,
     pub extraction_service: ExtractionService,
